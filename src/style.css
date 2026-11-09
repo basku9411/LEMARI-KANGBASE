@@ -18,3 +18,33 @@
 .member-action.activate{background:#e7f8ee;color:#187443;border-color:#bce8cc}
 .member-action.deactivate,.member-action.reject{background:#fff0f0;color:#a52c2c;border-color:#f4caca}
 @media(max-width:600px){.member-row{align-items:flex-start}.member-controls{width:100%;margin-left:54px}.member-action{flex:1}}
+/* Folder explorer: persistent per-folder controls and touch-friendly file actions */
+.file-entry{cursor:pointer;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.private-thumbnail{width:42px;height:42px;object-fit:cover;border-radius:11px;background:#f0edff;flex-shrink:0}
+.file-tile .private-thumbnail{width:100%;height:112px;object-fit:cover;border-radius:12px}
+.longpress-hint{display:none!important}
+.action-backdrop{position:fixed;inset:0;background:#10142677;z-index:30;display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.action-sheet{width:min(100%,520px);background:#fff;border-radius:22px;padding:12px 18px 18px;box-shadow:0 -10px 40px #10142622;display:flex;flex-direction:column;gap:5px}
+.action-sheet-grip{width:42px;height:4px;border-radius:99px;background:#d9dce5;margin:0 auto 10px}
+.action-sheet-title{font-size:14px;overflow-wrap:anywhere;padding:5px 4px 10px}
+.action-sheet button{display:flex;align-items:center;gap:13px;border:0;background:#f7f8fb;border-radius:12px;padding:13px 14px;text-align:left;color:#34394b;font-size:13px;font-weight:600}
+.action-sheet button svg{width:18px;height:18px}
+.action-sheet .danger-action{color:#c43c50;background:#fff1f2}
+.action-sheet .cancel-action{justify-content:center;background:transparent;color:#777f90;margin-top:3px}
+@media(max-width:700px){.longpress-hint{display:block!important;font-size:9px!important;color:#a1a8b5!important}.file-tile .private-thumbnail{height:100px}.action-backdrop{padding:0}.action-sheet{border-radius:22px 22px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
+/* Tampilan penjelajah kategori penuh seperti Google Drive / Windows Explorer */
+.explorer-toolbar{display:flex;align-items:center;gap:12px;margin:8px 0 20px}
+.explorer-toolbar .searchbar{flex:1;min-width:180px;margin:0;height:50px}
+.explorer-toolbar .toolbar{flex-shrink:0}
+.category-breadcrumb{margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid #eceef4}
+.category-breadcrumb .back-folder{margin:0}
+@media(max-width:700px){
+ .explorer-toolbar{align-items:stretch;flex-direction:column;gap:10px;margin:8px 0 16px}
+ .explorer-toolbar .searchbar{width:100%;min-width:0;height:48px}
+ .explorer-toolbar .toolbar{width:100%;display:grid;grid-template-columns:1fr 1fr auto;gap:7px}
+ .explorer-toolbar .toolbar .upload-btn,.explorer-toolbar .toolbar .secondary-btn{justify-content:center;min-height:42px;padding:9px 10px}
+ .explorer-toolbar .view-toggle{align-self:stretch}
+ .explorer-toolbar .view-toggle button{padding:7px}
+ .category-breadcrumb{align-items:flex-start}
+ .category-breadcrumb span{line-height:1.6;overflow-wrap:anywhere}
+}
