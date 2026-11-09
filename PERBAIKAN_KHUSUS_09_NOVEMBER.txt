@@ -1,0 +1,33 @@
+AMAN AJA — PERBAIKAN BERDASARKAN TIGA SCREENSHOT
+
+PERBAIKAN YANG DITERAPKAN
+1. Pemilik dikenali memakai UID pemilik yang sudah diketahui sebagai fallback jika VITE_ADMIN_UID kosong. Tetap samakan VITE_ADMIN_UID dan ADMIN_UID di Vercel dengan UID pemilik.
+2. Jika dokumen profil pemilik belum ada, aplikasi membuat profil pemilik berstatus approved. Jika dokumen pemilik ada tetapi statusnya belum approved, aplikasi memperbaikinya menjadi approved. Firestore Rules mengizinkan pemilik membuat/memperbarui dokumen profil miliknya sendiri.
+3. Jika profil anggota tidak ditemukan, aplikasi tidak lagi menampilkan layar “Menyiapkan akun...” tanpa batas; aplikasi menampilkan keterangan dan tombol keluar.
+4. Tampilan kategori sekarang menjadi tampilan folder virtual: saat Foto & Gambar dipilih, layar menampilkan isi kategori Foto saja. Toolbar pencarian, buat folder, upload, buka, dan hapus tetap berada di tampilan kategori dan di dalam setiap subfolder.
+5. Preview dan download Cloudinary dipisahkan. Preview memakai URL bertanda tangan untuk tampilan inline; download memakai private download URL. Versi aset juga disimpan saat upload untuk membantu membentuk URL preview.
+
+LANGKAH PEMASANGAN
+- Unggah seluruh isi ZIP ke root GitHub dan timpa file lama.
+- Firebase Console > Firestore Database > Rules: ganti dengan firestore.rules dari ZIP ini, lalu Publish.
+- Pastikan Vercel Environment Variables berikut ada dan nilainya benar:
+  VITE_ADMIN_UID = UID pemilik
+  ADMIN_UID = UID pemilik
+  CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+  FIREBASE_SERVICE_ACCOUNT_JSON
+  serta semua VITE_FIREBASE_* yang sudah digunakan.
+- Jangan hapus variabel lain yang sudah benar. Jangan unggah rahasia ke GitHub atau kirim lewat chat.
+- Deploy ulang Vercel dan tunggu status Ready.
+
+PENGUJIAN WAJIB
+1. Login akun pemilik: pastikan tidak berhenti di “Menyiapkan akun...”.
+2. Klik Foto & Gambar: upload satu foto contoh, buka/preview, download, cari, dan hapus.
+3. Buat folder dan subfolder di Foto & Gambar; pastikan file masuk ke folder yang sedang dibuka.
+4. Pindah ke Video; pastikan folder Foto tidak muncul di Video.
+5. Login akun uji kedua; pastikan file akun lain tidak dapat dibaca.
+6. Uji menu Anggota, aktifkan/nonaktifkan akun uji, lalu pastikan file tetap tersimpan.
+
+CATATAN KEJUJURAN
+- Build produksi Vite belum dapat dijalankan di lingkungan pembuatan ZIP karena npm install mengalami timeout. Pemeriksaan sintaks JSX dan sintaks API berhasil, dan struktur ZIP diperiksa, tetapi ini bukan pengganti deployment/test langsung.
+- Jika pemilik masih gagal memuat profil, atau preview file masih gagal, periksa pesan error di layar dan Vercel Runtime Logs. Jangan kirim API Secret, token, atau service-account JSON.
+- Jangan simpan KTP/KK asli sampai seluruh pengujian di atas berhasil.

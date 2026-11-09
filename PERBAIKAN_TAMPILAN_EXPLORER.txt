@@ -1,0 +1,30 @@
+PERBAIKAN AMAN AJA — TAMPILAN EXPLORER DAN MENU TEKAN LAMA
+
+Perubahan pada versi ini:
+1. Di kategori Foto, Video, Dokumen, KTP & Dokumen Penting, Tautan, dan Catatan, daftar hanya menampilkan item sesuai kategori yang dipilih.
+2. Pencarian nama file dan folder tetap tersedia di halaman kategori dan tetap terlihat saat masuk ke folder/subfolder.
+3. Tombol Upload File/Tambah File tetap tersedia di kategori, folder, dan subfolder. Folder Baru juga tersedia.
+4. Foto mempunyai thumbnail privat di daftar file. Thumbnail diambil melalui endpoint file-url yang memeriksa sesi dan kepemilikan akun.
+5. Menekan lama file di layar sentuh atau klik kanan di komputer membuka menu Lihat, Download, Bagikan tautan sementara, Hapus, dan Batal.
+6. Tautan berbagi menggunakan URL unduhan privat yang kedaluwarsa sekitar 5 menit. Berikan hanya kepada orang yang memang boleh menerima file tersebut.
+7. Tombol tindakan langsung pada kartu file tetap tersedia.
+
+PEMASANGAN:
+- Cadangkan repository GitHub terlebih dahulu.
+- Unggah/replace isi ZIP ini ke root repository, jangan membuat folder bertingkat baru.
+- Jangan menghapus Environment Variables Vercel.
+- Perubahan ini tidak mengubah Firestore Rules atau skema data. Pertahankan Rules terakhir yang sudah dipasang; jangan mengganti Rules hanya karena ZIP ini.
+- Tunggu Vercel deployment berstatus Ready.
+
+PENGUJIAN:
+1. Login pemilik dan akun anggota yang sudah disetujui.
+2. Buka Foto & Gambar. Pastikan hanya foto dan folder foto yang muncul.
+3. Periksa thumbnail foto. Ketuk foto untuk membuka.
+4. Tekan lama foto. Uji Lihat, Download, Bagikan tautan sementara, dan Hapus (uji hapus hanya pada file contoh).
+5. Buka folder dan subfolder. Pastikan kolom pencarian dan tombol upload tetap ada.
+6. Ulangi pada Video, Dokumen, Identitas, Tautan, dan Catatan.
+
+CATATAN:
+- Build produksi belum dapat diverifikasi di lingkungan penyusunan karena npm install mengalami timeout.
+- Tautan berbagi sementara berlaku sekitar 5 menit dan dapat digunakan siapa pun yang memilikinya selama masa berlaku. Jangan bagikan dokumen sensitif melalui tautan ini.
+- Lakukan pengujian dengan file contoh terlebih dahulu.

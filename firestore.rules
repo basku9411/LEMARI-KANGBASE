@@ -13,14 +13,15 @@ service cloud.firestore {
     match /users/{userId} {
       allow get: if isOwner() || isSelf(userId);
       allow list: if isOwner();
-      allow create: if isSelf(userId)
+      allow create: if (isOwner() && isSelf(userId) && request.resource.data.status == 'approved')
+        || (isSelf(userId)
         && request.resource.data.status == 'pending'
         && request.resource.data.paymentAmount == 50000
         && request.resource.data.keys().hasOnly(['displayName','email','status','createdAt','paymentAmount'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() > 0
-        && request.resource.data.displayName.size() <= 80;
-      allow update: if isOwner()
+        && request.resource.data.displayName.size() <= 80);
+      allow update: if (isOwner() && isSelf(userId))
         || (isSelf(userId)
           && resource.data.status == 'pending'
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly([

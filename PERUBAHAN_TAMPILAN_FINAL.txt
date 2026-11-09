@@ -1,0 +1,14 @@
+PERUBAHAN TAMPILAN AMAN AJA
+
+1. Dasbor utama hanya menampilkan kartu kategori. Daftar file tidak lagi ditumpuk di bawah kartu kategori.
+2. Menekan kategori (Foto, Video, Dokumen, KTP & Dokumen Penting, Tautan, atau Catatan) membuka tampilan penjelajah kategori tersendiri.
+3. Pada halaman kategori dan setiap subfolder tersedia pencarian nama file/folder, tombol Folder Baru, tombol + Upload, dan pilihan tampilan ikon/daftar.
+4. Tombol kembali membawa pengguna ke folder induk. Tombol Semua kategori membawa kembali ke dasbor utama.
+5. Upload dilakukan manual. Aplikasi TIDAK memaksa kecocokan tipe file dengan kategori yang sedang dibuka. Semua file yang dipilih disimpan ke kategori/folder aktif. Contoh: video boleh disimpan di kategori Foto jika pengguna memilih kategori Foto.
+6. Saat pengguna berada di dalam subfolder, file yang diunggah disimpan ke subfolder tersebut.
+7. Pencarian hanya memfilter nama file dan folder pada lokasi aktif.
+
+PENTING:
+- Ini perubahan antarmuka dan cara menentukan kategori saat upload. Tidak perlu mengubah Firestore Rules hanya karena perubahan ini.
+- Tetap lakukan uji coba upload, preview, download, dan hapus dengan file contoh setelah deploy.
+- Jangan menganggap build produksi sudah teruji bila proses npm install/build belum berhasil.
