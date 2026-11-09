@@ -1,78 +1,70 @@
-# AMAN AJA
+# AMAN AJA — Firebase + Cloudinary + Vercel
 
-Aplikasi brankas digital berbasis React + Vite + Firebase, responsif untuk HP dan desktop.
+Aplikasi brankas digital pribadi React + Vite. Firebase Authentication dan Firestore tetap digunakan untuk akun, status keanggotaan, metadata file, folder, dan persetujuan pemilik. File disimpan sebagai **authenticated assets** di Cloudinary. API serverless Vercel memverifikasi Firebase ID token dan membuat URL unduhan privat berumur 5 menit.
 
-## Fitur
-- Login, daftar email/password, dan reset password melalui link email Firebase Authentication.
-- Keanggotaan Rp50.000 dengan status `pending`, unggah bukti pembayaran, serta persetujuan/penolakan manual oleh satu akun pemilik.
-- Folder bertingkat, buat folder baru, buka folder, hapus folder kosong, tampilan ikon berjajar atau daftar yang dapat di-scroll.
-- Upload foto, video, dokumen, dan kategori dokumen identitas; koleksi tautan dan catatan.
-- Pencarian langsung, download, berbagi tautan, hapus file.
-- Firestore/Storage Rules membatasi data pribadi ke pemilik akun yang sudah disetujui.
+## Penting sebelum deploy
+- Jangan commit `.env.local`, Firebase service-account JSON, API Secret Cloudinary, atau private key ke GitHub.
+- Jangan mengaktifkan akses publik pada Cloudinary. Upload menggunakan `type=authenticated`.
+- Jangan deploy `storage.rules` ke Cloudinary; file aplikasi versi ini tidak memakai Firebase Storage. File `storage.rules` hanya menutup akses Firebase Storage.
+- Admin UID di rules sudah diset ke UID pemilik yang ditentukan untuk proyek ini. `VITE_ADMIN_UID` hanya mengatur tampilan panel; `ADMIN_UID` di Vercel mengamankan endpoint server.
+- Cloudinary signed upload dan authenticated delivery memerlukan konfigurasi paket/akun Cloudinary yang mendukung authenticated assets. Uji dengan file non-sensitif terlebih dahulu.
 
-## 1. Siapkan Firebase
-1. Buat project di https://console.firebase.google.com/.
-2. Authentication → Sign-in method → aktifkan **Email/Password**.
-3. Firestore Database → Create database.
-4. Storage → Get started.
-5. Project settings → Your apps → Web app → salin konfigurasi.
-6. Buat `.env.local` dari `.env.example`, isi enam nilai `VITE_FIREBASE_...`.
+## 1. Firebase
+1. Firebase Authentication → Sign-in method → aktifkan Email/Password.
+2. Firestore Database tetap gunakan database yang sudah dibuat.
+3. Firestore Database → Rules: salin isi `firestore.rules`, lalu Publish.
+4. Firebase Console → Project settings → General → Your apps → Web app: salin `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, dan `appId`.
+5. Untuk server Vercel: Project settings → Service accounts → Generate new private key. Simpan file JSON dengan aman; jangan upload ke GitHub.
 
-## 2. Tentukan akun pemilik/admin
-1. Daftarkan akun email milik Anda melalui aplikasi setelah Firebase dikonfigurasi.
-2. Firebase Console → Authentication → Users → salin **UID** akun tersebut.
-3. Isi `VITE_ADMIN_UID=UID_ANDA` di `.env.local` dan di Vercel Environment Variables.
-4. Di `firestore.rules` dan `storage.rules`, ganti teks `GANTI_DENGAN_UID_PEMILIK` dengan UID yang sama persis.
-5. Pastikan akun pemilik mempunyai dokumen `users/{UID}` di Firestore dengan field `status: "approved"`. Buat/ubah melalui Firebase Console sebagai pemilik project.
+## 2. Cloudinary
+Dari Cloudinary Console → API Keys ambil Cloud name, API Key, dan API Secret. API Secret hanya dimasukkan ke Environment Variables Vercel. Cloud name untuk akun yang saat ini digunakan: `duqwdwn9q`.
 
-**Penting:** VITE_ADMIN_UID hanya mengatur tampilan panel di browser, bukan pengaman sebenarnya. Pengaman sebenarnya adalah UID yang ditulis langsung di Firebase Security Rules. Jangan pernah mengganti aturan dengan akses publik. Jangan membagikan UID admin sebagai rahasia; keamanan ditentukan oleh aturan server dan akses akun Firebase.
+## 3. GitHub
+Upload **isi folder `brankas-pribadi`** ke root repository, bukan file ZIP-nya. Timpa file aplikasi lama dengan file versi ini dan tambahkan folder `api/` serta `lib/`. Jangan menghapus repository atau mengganti Firebase project. Pastikan `.env.local` dan file service-account tidak ikut terunggah.
 
-## 3. Atur pembayaran Rp50.000
-Saat ini paket starter masih menggunakan status pending dan unggah bukti manual; payment gateway otomatis belum diaktifkan.
-- Isi `VITE_PAYMENT_INSTRUCTIONS` dengan instruksi transfer/QRIS yang benar-benar Anda miliki, misalnya nama bank, nomor rekening, nama penerima atau instruksi QRIS.
-- Jangan masukkan data rekening contoh. Pastikan jumlah Rp50.000 dan ketentuan biaya dijelaskan kepada pendaftar.
-- Sampai Xendit dikonfigurasi, pendaftar membuat akun → status pending → mengunggah bukti → pemilik memeriksa bukti di panel **Persetujuan Anggota** → pemilik klik setujui/tolak.
-- Hanya UID pemilik yang ditetapkan di Firestore Rules dapat mengubah status anggota. Pengguna tidak bisa menyetujui akunnya sendiri.
-- Untuk mengaktifkan kembali akun yang ditolak, pemilik dapat mengubah status dokumen pengguna menjadi `pending` dari Firebase Console, lalu minta pengguna login kembali.
+## 4. Vercel
+Import repository atau buka Project yang sudah ada. Build command: `npm run build`; Output Directory: `dist`; Node.js 20.x atau lebih baru.
 
+Tambahkan Environment Variables berikut pada Vercel (Production, Preview bila diperlukan):
 
-## Reset password melalui email
-- Di halaman login, pengguna mengisi email akun lalu menekan **LUPA PASSWORD?**.
-- Firebase Authentication mengirim email berisi link untuk membuat password baru. Pengguna membuka link tersebut, menyimpan password baru, lalu login kembali.
-- Firebase Console → Authentication → Templates → Password reset: atur nama pengirim, alamat balasan, dan template email.
-- Firebase Console → Authentication → Settings → Authorized domains: pastikan domain Vercel Anda sudah ditambahkan.
-- Uji alur ini setelah domain produksi aktif. Pengiriman email dan masa berlaku link dikelola Firebase.
+### Browser config
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_AUTH_DOMAIN`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_FIREBASE_APP_ID`
+- `VITE_ADMIN_UID` = UID pemilik
+- `VITE_PAYMENT_INSTRUCTIONS` = instruksi pembayaran yang benar
 
-## Pembayaran otomatis (integrasi berikutnya)
-Payment gateway yang direkomendasikan: **Xendit**. Dokumentasi Xendit mencantumkan Virtual Account/transfer bank, QRIS, serta e-wallet termasuk OVO, DANA, dan GoPay untuk Indonesia. Ketersediaan metode dapat bergantung pada verifikasi dan aktivasi akun merchant.
-- Daftar dan selesaikan verifikasi merchant di https://www.xendit.co/.
-- Integrasi produksi membutuhkan backend/serverless endpoint untuk membuat invoice dan menerima webhook pembayaran. Secret API key harus disimpan sebagai environment variable server-side (misalnya `XENDIT_SECRET_KEY`), **jangan** pernah memakai prefix `VITE_` atau menaruh secret di browser/GitHub.
-- Webhook harus memverifikasi token/keaslian notifikasi, jumlah Rp50.000, ID transaksi, dan status pembayaran sebelum menandai pembayaran berhasil.
-- Status pembayaran berhasil **tidak otomatis menyetujui keanggotaan**: akun tetap berstatus `pending` sampai pemilik aplikasi menekan Setujui. Penolakan juga hanya dapat dilakukan pemilik melalui aturan keamanan server.
-- Integrasi gateway belum aktif pada paket starter ini karena membutuhkan akun merchant Xendit, secret key, callback/webhook URL, dan backend deployment yang dikonfigurasi pemilik.
+### Server-only config
+- `ADMIN_UID` = UID pemilik yang sama
+- `CLOUDINARY_CLOUD_NAME` = `duqwdwn9q`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+- `FIREBASE_SERVICE_ACCOUNT_JSON` = seluruh isi file service-account JSON dalam satu nilai environment variable. Tempel sebagai JSON valid; jangan membagikannya di chat atau GitHub.
 
-## 4. Pasang Firebase Security Rules
-Salin isi `firestore.rules` ke Firestore Database → Rules dan `storage.rules` ke Storage → Rules. Sebelum Publish, ganti `GANTI_DENGAN_UID_PEMILIK` pada kedua file dengan UID admin yang benar.
+Setelah semua variabel disimpan, lakukan Redeploy. Setiap perubahan Environment Variables memerlukan deployment ulang.
 
-## 5. Jalankan lokal
-Butuh Node.js 20+.
-```bash
-npm install
-npm run dev
-npm run build
-```
+## 5. Alur aplikasi
+- Daftar: Firebase Auth membuat akun, Firestore membuat profil `pending` dengan biaya Rp50.000.
+- Bukti pembayaran: akun pending boleh meminta tanda tangan upload hanya ke `payment-proofs/{UID}`; tidak mendapat akses brankas.
+- Persetujuan: hanya UID pemilik yang ditetapkan dalam Firestore Rules dan `ADMIN_UID` Vercel dapat melihat bukti dan mengubah status melalui panel pemilik.
+- Brankas: hanya akun berstatus `approved` yang dapat membaca/menulis `users/{UID}/items` dan `folders` miliknya sendiri.
+- Upload file: API hanya menandatangani upload ke folder UID pemanggil.
+- Buka/download: API memeriksa token dan metadata Firestore milik UID yang sama, lalu membuat private download URL yang kedaluwarsa dalam 5 menit.
+- Hapus: API hanya menghapus asset berdasarkan dokumen item milik UID pemanggil.
 
-## 6. Deploy GitHub + Vercel
-1. Upload seluruh isi folder ke repository GitHub. Jangan upload `.env.local`.
-2. Vercel → Add New → Project → Import repository.
-3. Build command `npm run build`; output directory `dist`.
-4. Tambahkan semua variabel dari `.env.local` ke Vercel Project → Settings → Environment Variables.
-5. Deploy. Setiap push ke branch production akan memicu deployment baru.
+## 6. Uji sebelum dipakai sungguhan
+1. Daftarkan akun uji kedua dengan email yang kamu kuasai.
+2. Pastikan akun uji berstatus pending dan tidak dapat membuka brankas.
+3. Unggah bukti pembayaran dummy, bukan KTP/KK.
+4. Masuk sebagai pemilik dan buka bukti uji; setujui akun.
+5. Upload file dummy sebagai anggota, buka dan download.
+6. Buat akun uji ketiga dan pastikan akun itu tidak dapat membaca file akun kedua.
+7. Pastikan URL file kedaluwarsa setelah 5 menit.
 
-## Catatan keamanan dan operasional
-- Pembayaran otomatis belum aktif sampai backend Xendit dan webhook dikonfigurasi; untuk sementara pemilik memeriksa bukti transfer secara manual.
-- Ini adalah aplikasi web responsif/PWA-ready, bukan APK Android native yang sudah dipaketkan.
-- Link unduhan Firebase bertoken bersifat bearer link: siapa pun yang menerima link dapat mengakses file. Berhati-hatilah membagikan dokumen KTP/KK. Untuk dokumen sensitif, pengembangan lanjutan sebaiknya memakai tautan sementara dari backend tepercaya dan/atau enkripsi sisi-klien.
-- Folder yang berisi file/subfolder tidak dapat dihapus sampai isinya dipindahkan atau dihapus.
-- Batas upload file 100 MB; bukti pembayaran 10 MB. Batas aktual juga tunduk pada paket dan konfigurasi Firebase.
-- Untuk bisnis berbayar skala produksi, pertimbangkan Cloud Functions/Admin SDK untuk audit log, email notifikasi, verifikasi transaksi otomatis, dan custom claims; jangan mengandalkan UI browser sebagai kontrol keamanan.
+## Batasan yang belum diaktifkan
+- Pembayaran otomatis Xendit belum diintegrasikan; verifikasi pembayaran masih manual.
+- Migrasi file lama dari Firebase Storage ke Cloudinary belum otomatis. File lama yang hanya tersimpan di Firebase Storage tidak otomatis muncul di Cloudinary.
+- Jangan gunakan dokumen identitas sensitif sebelum seluruh pengujian akses berhasil. Tautan privat tetap dapat diakses oleh siapa pun yang sempat menerima URL selama masa berlakunya.

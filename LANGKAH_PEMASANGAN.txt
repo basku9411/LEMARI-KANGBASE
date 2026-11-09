@@ -1,0 +1,42 @@
+AMAN AJA — LANGKAH PEMASANGAN VERSI CLOUDINARY
+
+PENTING: Jangan hapus repository lama. ZIP ini berisi kode sumber, bukan aplikasi yang otomatis terpasang.
+
+A. GITHUB
+1. Buka repository basku9411/LEMARI-KANGBASE.
+2. Download/ekstrak ZIP ini di HP/komputer.
+3. Upload ISI folder ZIP (src, api, lib, package.json, index.html, vite.config.js, firestore.rules, README.md, dan file pendukung) ke ROOT repository.
+4. Pilih commit ke branch yang dipakai Vercel (biasanya main).
+5. Jangan upload file .env.local, Firebase service-account JSON, atau API Secret.
+6. firestore.rules versi ZIP ini perlu dipasang di Firebase Console > Firestore Database > Rules, lalu Publish. Jangan tempel ke Storage Rules.
+
+B. VERCEL ENVIRONMENT VARIABLES
+Browser:
+VITE_FIREBASE_API_KEY = API key Web Firebase
+VITE_FIREBASE_AUTH_DOMAIN = domain auth Firebase
+VITE_FIREBASE_PROJECT_ID = brangkas-pribadi-pro
+VITE_FIREBASE_STORAGE_BUCKET = nilai storageBucket dari konfigurasi Web Firebase
+VITE_FIREBASE_MESSAGING_SENDER_ID = sender ID Web Firebase
+VITE_FIREBASE_APP_ID = app ID Web Firebase
+VITE_ADMIN_UID = UID pemilik (sudah dipasang di contoh sebagai TdRrSnNluBOJCgnY3aRzBKMNlpZ2)
+VITE_PAYMENT_INSTRUCTIONS = instruksi pembayaran yang benar
+
+SERVER-ONLY (tanpa awalan VITE_):
+ADMIN_UID = TdRrSnNluBOJCgnY3aRzBKMNlpZ2
+CLOUDINARY_CLOUD_NAME = duqwdwn9q
+CLOUDINARY_API_KEY = API Key Cloudinary
+CLOUDINARY_API_SECRET = API Secret Cloudinary
+FIREBASE_SERVICE_ACCOUNT_JSON = seluruh isi JSON service account Firebase dalam satu baris/field environment variable.
+
+Cara membuat service account: Firebase Console > Project settings > Service accounts > Generate new private key. Simpan file unduhan. Buka file itu dan salin seluruh JSON ke Vercel Environment Variables dengan nama FIREBASE_SERVICE_ACCOUNT_JSON. Jangan pernah kirim file/key itu ke chat atau GitHub.
+
+Setelah semua variabel tersimpan, Redeploy Vercel.
+
+C. UJI AMAN
+Gunakan file dummy, bukan KTP/KK asli. Uji daftar akun baru, upload bukti pembayaran, persetujuan oleh pemilik, upload/download/hapus file, dan pastikan akun uji lain tidak dapat membuka file tersebut. Jangan gunakan untuk data sensitif sampai semua uji lolos.
+
+CATATAN
+- Build lokal tidak dapat diverifikasi di lingkungan penyusunan ini karena npm install tidak selesai (koneksi paket mengalami timeout). Kode API server telah lolos pemeriksaan sintaks Node.js; build Vite tetap harus dikonfirmasi oleh Vercel setelah upload.
+- File lama yang sebelumnya berada di Firebase Storage tidak otomatis dipindahkan ke Cloudinary.
+- Pembayaran otomatis Xendit belum termasuk; pembayaran tetap diperiksa manual.
+- Cloudinary URL privat dibuat dengan masa berlaku sekitar 5 menit.
