@@ -1,42 +1,84 @@
-AMAN AJA — LANGKAH PEMASANGAN VERSI CLOUDINARY
+AMAN AJA — PAKET PERBAIKAN BRANKAS, MENU PEMILIK & MANAJEMEN ANGGOTA
 
-PENTING: Jangan hapus repository lama. ZIP ini berisi kode sumber, bukan aplikasi yang otomatis terpasang.
+BACA DULU
+Paket ini memperbaiki menu pemilik, folder per kategori seperti File Explorer, dan pesan error upload. Paket ini tidak bisa menjamin sistem online berhasil sebelum konfigurasi Firebase, Cloudinary, dan Vercel milik Anda benar serta diuji. Jangan masukkan KTP/KK asli sebelum seluruh tes berhasil.
 
-A. GITHUB
-1. Buka repository basku9411/LEMARI-KANGBASE.
-2. Download/ekstrak ZIP ini di HP/komputer.
-3. Upload ISI folder ZIP (src, api, lib, package.json, index.html, vite.config.js, firestore.rules, README.md, dan file pendukung) ke ROOT repository.
-4. Pilih commit ke branch yang dipakai Vercel (biasanya main).
-5. Jangan upload file .env.local, Firebase service-account JSON, atau API Secret.
-6. firestore.rules versi ZIP ini perlu dipasang di Firebase Console > Firestore Database > Rules, lalu Publish. Jangan tempel ke Storage Rules.
+1. GITHUB
+- Buka repository basku9411/LEMARI-KANGBASE.
+- Ekstrak ZIP ini.
+- Upload ISI ZIP ke ROOT repository (bukan ZIP-nya). Izinkan file lama ditimpa.
+- Pastikan folder api/, lib/, src/ dan file package.json, index.html, vite.config.js, firestore.rules ikut terunggah.
+- Jangan hapus repository.
+- Jangan upload .env.local, file service-account Firebase, API Secret Cloudinary, atau private key.
 
-B. VERCEL ENVIRONMENT VARIABLES
-Browser:
-VITE_FIREBASE_API_KEY = API key Web Firebase
-VITE_FIREBASE_AUTH_DOMAIN = domain auth Firebase
-VITE_FIREBASE_PROJECT_ID = brangkas-pribadi-pro
-VITE_FIREBASE_STORAGE_BUCKET = nilai storageBucket dari konfigurasi Web Firebase
-VITE_FIREBASE_MESSAGING_SENDER_ID = sender ID Web Firebase
-VITE_FIREBASE_APP_ID = app ID Web Firebase
-VITE_ADMIN_UID = UID pemilik (sudah dipasang di contoh sebagai TdRrSnNluBOJCgnY3aRzBKMNlpZ2)
-VITE_PAYMENT_INSTRUCTIONS = instruksi pembayaran yang benar
+2. FIRESTORE RULES
+- Firebase Console > Firestore Database > Rules.
+- Ganti rules dengan isi file firestore.rules dari paket ini, lalu Publish.
+- Rules ini memakai UID pemilik yang sudah diketahui pada proyek AMAN AJA. Pastikan UID tersebut sama dengan VITE_ADMIN_UID dan ADMIN_UID di Vercel.
+- Jangan tempel firestore.rules ke menu Firebase Storage Rules. Aplikasi ini menyimpan file di Cloudinary, bukan Firebase Storage.
 
-SERVER-ONLY (tanpa awalan VITE_):
-ADMIN_UID = TdRrSnNluBOJCgnY3aRzBKMNlpZ2
-CLOUDINARY_CLOUD_NAME = duqwdwn9q
-CLOUDINARY_API_KEY = API Key Cloudinary
-CLOUDINARY_API_SECRET = API Secret Cloudinary
-FIREBASE_SERVICE_ACCOUNT_JSON = seluruh isi JSON service account Firebase dalam satu baris/field environment variable.
+3. VERCEL ENVIRONMENT VARIABLES
+Jangan hapus variabel yang sudah benar. Periksa nama dan nilainya di Project > Settings > Environment Variables.
 
-Cara membuat service account: Firebase Console > Project settings > Service accounts > Generate new private key. Simpan file unduhan. Buka file itu dan salin seluruh JSON ke Vercel Environment Variables dengan nama FIREBASE_SERVICE_ACCOUNT_JSON. Jangan pernah kirim file/key itu ke chat atau GitHub.
+Browser (awalan VITE_):
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
+VITE_ADMIN_UID
+VITE_PAYMENT_INSTRUCTIONS
 
-Setelah semua variabel tersimpan, Redeploy Vercel.
+Server-only (tanpa VITE_):
+ADMIN_UID
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+FIREBASE_SERVICE_ACCOUNT_JSON
 
-C. UJI AMAN
-Gunakan file dummy, bukan KTP/KK asli. Uji daftar akun baru, upload bukti pembayaran, persetujuan oleh pemilik, upload/download/hapus file, dan pastikan akun uji lain tidak dapat membuka file tersebut. Jangan gunakan untuk data sensitif sampai semua uji lolos.
+Nilai yang sudah diketahui:
+- Firebase Project ID: brangkas-pribadi-pro
+- Cloudinary Cloud Name: duqwdwn9q
+- UID pemilik: TdRrSnNluBOJCgnY3aRzBKMNlpZ2
 
-CATATAN
-- Build lokal tidak dapat diverifikasi di lingkungan penyusunan ini karena npm install tidak selesai (koneksi paket mengalami timeout). Kode API server telah lolos pemeriksaan sintaks Node.js; build Vite tetap harus dikonfirmasi oleh Vercel setelah upload.
-- File lama yang sebelumnya berada di Firebase Storage tidak otomatis dipindahkan ke Cloudinary.
-- Pembayaran otomatis Xendit belum termasuk; pembayaran tetap diperiksa manual.
-- Cloudinary URL privat dibuat dengan masa berlaku sekitar 5 menit.
+FIREBASE_SERVICE_ACCOUNT_JSON harus berisi seluruh JSON service account Firebase yang valid. Buat melalui Firebase Console > Project settings > Service accounts > Generate new private key. Masukkan isinya langsung ke Environment Variables Vercel. JANGAN kirim JSON atau API Secret ke chat, dan jangan masukkan ke GitHub.
+
+4. DEPLOY ULANG
+- Setelah GitHub selesai menerima perubahan, buka Vercel > Project AMAN AJA > Deployments.
+- Tunggu deployment terbaru selesai dan berstatus Ready.
+- Jika build gagal, jangan lanjut tes upload. Buka deployment tersebut dan baca Build Logs.
+- Jika Anda mengubah Environment Variables, lakukan Redeploy agar nilai baru dipakai.
+
+5. UJI DENGAN FILE DUMMY
+A. Masuk memakai akun pemilik yang UID-nya tercantum di atas. Pastikan menu Foto & Gambar dapat dibuka dan Brankas Pemilik tampil.
+B. Buat folder uji di Foto & Gambar, buka folder tersebut, buat subfolder, lalu upload satu foto dummy. Pastikan foto berada di folder yang dibuka.
+C. Pindah ke Video. Pastikan folder Foto tadi tidak muncul di kategori Video.
+D. Kembali ke Foto, buka folder dan uji buka/download/hapus file dummy.
+E. Buka menu Anggota. Pastikan semua akun terdaftar tampil dengan statusnya: Aktif, Nonaktif, Menunggu persetujuan, atau Ditolak.
+F. Daftarkan akun uji kedua. Pastikan akun itu Menunggu persetujuan dan tidak dapat membuka brankas sebelum disetujui.
+G. Dari menu Anggota, aktifkan akun uji. Pastikan status menjadi Aktif, lalu uji upload file.
+H. Nonaktifkan akun uji dari menu Anggota. Pastikan akun tersebut tidak dapat masuk kembali/mengakses API dan file tetap tersimpan.
+I. Aktifkan kembali akun yang sama. Pastikan akses kembali normal dan file lama tetap ada.
+J. Masuk dengan akun uji lain. Pastikan tidak bisa melihat file akun pertama. Ini tes wajib sebelum menyimpan dokumen pribadi.
+
+6. PENGATURAN ANGGOTA
+- Saat pendaftaran baru, anggota mengisi nama lengkap. Daftar pemilik menampilkan nama dan email; akun lama yang belum memiliki nama tetap ditampilkan memakai email.
+- Menu Anggota hanya muncul untuk UID pemilik yang cocok di VITE_ADMIN_UID.
+- Endpoint /api/member-status juga memeriksa ADMIN_UID dan Firebase Admin SDK di server; mengganti tampilan browser saja tidak memberi hak pemilik.
+- Menonaktifkan anggota mengubah status Firestore menjadi disabled, menonaktifkan akun Firebase Authentication, dan mencabut token refresh.
+- Mengaktifkan anggota mengembalikan akun menjadi approved. Menolak pendaftaran mengubah status menjadi rejected.
+- File Cloudinary dan dokumen metadata tidak dihapus saat anggota dinonaktifkan.
+
+7. JIKA UPLOAD GAGAL
+- Baca pesan lengkap yang tampil di aplikasi.
+- Buka Vercel > Project > Deployments > deployment terbaru > Functions/Runtime Logs.
+- Cari fungsi /api/cloudinary-signature pada waktu upload.
+- Salin hanya teks error-nya jika perlu bantuan. Jangan kirim API Secret, token login, private key, atau isi FIREBASE_SERVICE_ACCOUNT_JSON.
+
+CATATAN PENTING
+- Build penuh lokal belum dapat diverifikasi karena npm install timeout saat paket sedang diunduh. Vercel harus menunjukkan deployment Ready sebelum aplikasi dipakai.
+- Cloudinary paket gratis memiliki batas pemakaian/kuota; tidak ada jaminan penyimpanan tanpa batas.
+- Pembayaran otomatis Xendit belum aktif. Pembayaran masih diverifikasi manual.
+- Folder lama tanpa kategori tetap terlihat di Semua File. Folder baru akan mengikuti kategori tempat folder dibuat.
+- Jangan gunakan data sensitif sampai semua tes dummy dan tes pemisahan antar-akun berhasil.

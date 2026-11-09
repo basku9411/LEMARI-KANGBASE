@@ -16,7 +16,10 @@ service cloud.firestore {
       allow create: if isSelf(userId)
         && request.resource.data.status == 'pending'
         && request.resource.data.paymentAmount == 50000
-        && request.resource.data.keys().hasOnly(['email','status','createdAt','paymentAmount']);
+        && request.resource.data.keys().hasOnly(['displayName','email','status','createdAt','paymentAmount'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 80;
       allow update: if isOwner()
         || (isSelf(userId)
           && resource.data.status == 'pending'
