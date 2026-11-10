@@ -1,0 +1,22 @@
+PENYEMPURNAAN UX AMAN AJA
+
+Perubahan pada versi ini:
+1. Pesan berhasil/gagal ditampilkan sebagai toast mengambang dan hilang otomatis setelah sekitar 4 detik.
+2. Tombol aksi cepat pada kartu file disembunyikan agar tampilan galeri lebih bersih.
+3. Ketuk satu kali pada kartu file untuk membuka file/tautan/catatan.
+4. Tekan lama pada file untuk membuka menu tindakan: Lihat, Salin, Download (file Cloudinary), Edit nama, Bagikan, dan Hapus.
+5. Bagikan file privat memakai tautan sementara dari endpoint file-url; tautan berlaku sekitar 5 menit.
+6. Upload, akun, folder, Firebase, Cloudinary, dan API yang sudah ada dipertahankan.
+
+Pemasangan:
+- Cadangkan repository sebelum mengganti file.
+- Ekstrak ZIP dan unggah seluruh isi ke root repository GitHub, timpa file yang sama.
+- Jangan hapus Environment Variables Vercel.
+- Tidak ada perubahan Firestore Rules khusus untuk penyempurnaan UX ini.
+- Tunggu deployment Vercel berstatus Ready, lalu uji dengan file contoh.
+
+Catatan pengujian:
+- JSX diperiksa menggunakan TypeScript transpiler: tanpa diagnostic sintaks.
+- API JavaScript diperiksa dengan node --check: lulus.
+- Build Vite produksi belum terkonfirmasi karena npm install timeout pada lingkungan pemeriksaan.
+- Uji langsung di perangkat dan akun Firebase/Cloudinary tetap diperlukan.
