@@ -48,3 +48,12 @@
  .category-breadcrumb{align-items:flex-start}
  .category-breadcrumb span{line-height:1.6;overflow-wrap:anywhere}
 }
+
+/* UX galeri: kartu bersih, menu tekan lama, dan notifikasi otomatis */
+.file-entry .file-actions{display:none!important}
+.file-entry{cursor:pointer;-webkit-touch-callout:none}
+.toast-notice{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;max-width:min(92vw,560px);width:max-content;padding:13px 18px;border-radius:14px;box-shadow:0 10px 35px #1014262b;font-size:13px;font-weight:600;line-height:1.45;animation:toast-in .2s ease-out}
+.toast-success{background:#16834e;color:#fff}
+.toast-error{background:#a92e3b;color:#fff}
+@keyframes toast-in{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+@media(max-width:700px){.toast-notice{bottom:calc(18px + env(safe-area-inset-bottom));font-size:12px;padding:12px 15px}}
