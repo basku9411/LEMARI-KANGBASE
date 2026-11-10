@@ -57,3 +57,18 @@
 .toast-error{background:#a92e3b;color:#fff}
 @keyframes toast-in{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
 @media(max-width:700px){.toast-notice{bottom:calc(18px + env(safe-area-inset-bottom));font-size:12px;padding:12px 15px}}
+
+/* Navigasi riwayat dan pilihan tampilan kategori di bawah profil */
+.profile-view-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:14px 2px 4px;padding:10px 10px;border:1px solid #eceef4;border-radius:13px;background:#fafaff}
+.profile-view-toggle>span{font-size:11px;font-weight:700;color:#7d8495}
+.profile-view-toggle .view-toggle{flex-shrink:0}
+.profile-view-toggle .view-toggle button{padding:7px}
+.category-list{display:flex;flex-direction:column;gap:8px}
+.category-list .category-card{min-height:0;display:grid;grid-template-columns:54px minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;column-gap:14px;padding:13px 16px;border-radius:15px}
+.category-list .category-card .cat-icon{grid-column:1;grid-row:1/3;width:48px;height:48px;margin:0;border-radius:13px}
+.category-list .category-card h4{grid-column:2;grid-row:1;margin:0;font-size:13px}
+.category-list .category-card p{grid-column:2;grid-row:2;margin:4px 0 0;font-size:10px}
+.category-list .category-card .card-foot{grid-column:3;grid-row:1/3;display:flex;align-items:center;gap:10px;margin:0}
+.category-list .category-card .card-foot>b{font-size:18px}
+.category-list .category-card .card-foot span{width:30px;height:30px}
+@media(max-width:700px){.profile-view-toggle{margin-top:12px}.category-list .category-card{grid-template-columns:44px minmax(0,1fr) auto;padding:12px}.category-list .category-card .cat-icon{width:42px;height:42px}.category-list .category-card p{font-size:9px}.category-list .category-card .card-foot{gap:5px}.category-list .category-card .card-foot>b{font-size:16px}}
